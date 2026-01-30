@@ -15,9 +15,9 @@
       --text-secondary: #636366;
       --glass-bg: rgba(255, 255, 255, 0.38);
       --glass-border: 1px solid rgba(255, 255, 255, 0.65);
-      --glass-shadow: 0 12px 48px rgba(0, 0, 0, 0.14);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
       --glass-blur: blur(40px);
-      --transition: 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       --radius: 32px;
     }
 
@@ -30,7 +30,7 @@
       --text-secondary: #a1a1a6;
       --glass-bg: rgba(45, 45, 50, 0.52);
       --glass-border: 1px solid rgba(255, 255, 255, 0.20);
-      --glass-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.50);
     }
 
     body.solid-mode, body.dark-mode.solid-mode {
@@ -154,15 +154,14 @@
 
     .email-pill:hover { transform: scale(1.04) translateY(-1px); }
 
-    /* ── TOGGLES ── */
+    /* ── ULTRA-COMPACT TOGGLES ── */
     .toggle {
       position: fixed;
-      top: 16px;
-      height: 54px;
+      top: 12px;
+      height: 42px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 0 14px;
+      justify-content: center;
       border-radius: 999px;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
@@ -173,8 +172,6 @@
       overflow: hidden;
       cursor: pointer;
       z-index: 100;
-      font-size: 15px;
-      font-weight: 600;
       color: var(--text-primary);
       user-select: none;
       white-space: nowrap;
@@ -183,66 +180,65 @@
     .toggle:hover,
     .toggle:active {
       transform: translateY(-3px);
-      box-shadow: 0 16px 56px rgba(0,0,0,0.18);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
     }
 
     .toggle-icon {
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1;
       flex-shrink: 0;
-      min-width: 24px;
-      text-align: center;
     }
 
     .toggle-text {
       opacity: 0;
       width: 0;
-      transition: opacity 0.35s ease, width 0.42s ease;
+      margin-left: 0;
+      transition: opacity 0.32s ease, width 0.4s ease, margin-left 0.4s ease;
     }
 
     #theme-toggle {
-      left: 16px;
-      width: 54px;
-      justify-content: center;
+      left: 12px;
+      width: 42px;
       padding: 0;
     }
 
     #theme-toggle:hover,
     #theme-toggle:active {
-      width: 140px;
+      width: 130px;
       justify-content: flex-start;
-      padding: 0 14px;
+      padding: 0 12px;
     }
 
     #theme-toggle:hover .toggle-text,
     #theme-toggle:active .toggle-text {
       opacity: 1;
       width: auto;
+      margin-left: 10px;
     }
 
     #glass-toggle {
-      right: 16px;
-      width: 62px;           /* slightly wider to comfortably fit switch */
-      justify-content: center;
-      padding: 0 12px;
+      right: 12px;
+      width: 46px;
+      padding: 0 8px;
     }
 
     #glass-toggle:hover,
     #glass-toggle:active {
-      width: 150px;
+      width: 140px;
       justify-content: flex-start;
-      padding: 0 14px;
+      padding: 0 12px;
     }
 
     #glass-toggle:hover .toggle-text,
     #glass-toggle:active .toggle-text {
       opacity: 1;
       width: auto;
+      margin-left: 10px;
     }
 
     .switch {
-      width: 48px;
-      height: 28px;
+      width: 42px;
+      height: 24px;
       border-radius: 999px;
       background: #34c759;
       position: relative;
@@ -253,36 +249,35 @@
     .switch.off { background: #a0a0a8; }
 
     .thumb {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       background: white;
       border-radius: 50%;
       position: absolute;
       top: 2px;
       left: 2px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.28);
-      transition: left 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.25);
+      transition: left 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .switch:not(.off) .thumb { left: calc(100% - 26px); }
+    .switch:not(.off) .thumb { left: calc(100% - 22px); }
 
     /* Mobile adjustments */
     @media (max-width: 640px) {
-      main { padding: 16px 20px; align-items: flex-start; padding-top: 100px; }
+      main { padding: 16px 20px; align-items: flex-start; padding-top: 80px; }
 
       .card { width: 100%; padding: 32px 24px; }
 
       .toggle {
-        top: 12px;
-        height: 48px;
-        font-size: 14px;
+        top: 10px;
+        height: 38px;
       }
 
-      #theme-toggle { width: 48px !important; }
-      #theme-toggle:hover, #theme-toggle:active { width: 130px !important; }
+      #theme-toggle { width: 38px !important; }
+      #theme-toggle:hover, #theme-toggle:active { width: 120px !important; }
 
-      #glass-toggle { width: 56px !important; padding: 0 10px; }
-      #glass-toggle:hover, #glass-toggle:active { width: 140px !important; }
+      #glass-toggle { width: 42px !important; padding: 0 7px; }
+      #glass-toggle:hover, #glass-toggle:active { width: 130px !important; }
 
       .blob { filter: blur(80px); opacity: 0.58; }
       body.solid-mode .blob { opacity: 0.18; }
@@ -327,7 +322,7 @@
     </div>
   </main>
 
-  <!-- Toggles -->
+  <!-- Compact Toggles -->
   <div id="theme-toggle" class="toggle">
     <span id="themeEmoji" class="toggle-icon">☀️</span>
     <span id="themeText" class="toggle-text">Light</span>
