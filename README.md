@@ -1,1 +1,1 @@
-# [https://maanasadiyodi.astromine.in.net](https://maanasadiyodi.astromine.in.net)
+# [https://maanasadiyodi.github.io](https://maanasadiyodi.github.io)
