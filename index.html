@@ -4,83 +4,137 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maanas Adiyodi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #F0EEE9;
-      --blob-1: #D0E1F9;
-      --blob-2: #D1EAD9;
-      --blob-3: #FADCD9;
-      --text-primary: #1d1d1f;
-      --text-secondary: #666;
-      --glass-bg: rgba(255, 255, 255, 0.28);
-      --glass-border: 1px solid rgba(255, 255, 255, 0.55);
-      --glass-shadow: 0 12px 48px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255,255,255,0.25);
-      --glass-blur: blur(48px);
-      --transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      --radius: 28px;
+      --bg: #f6f5f4;
+      --accent: #3584e4;
+      --blob-1: #1d3949;
+      --blob-2: #2a5a73;
+      --blob-3: #3584e4;
+      --text-primary: #2e3436;
+      --text-secondary: #5e5c64;
+      --glass-bg: rgba(255, 255, 255, 0.4);
+      --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+      --glass-blur: blur(20px);
+      --radius: 16px;
     }
 
     body.dark-mode {
-      --bg: #0f1115;
-      --blob-1: #1e293b;
-      --blob-2: #14532d;
-      --blob-3: #4c1d95;
-      --text-primary: #f0f0f5;
-      --text-secondary: #999;
-      --glass-bg: rgba(30, 30, 35, 0.5);
-      --glass-border: 1px solid rgba(255, 255, 255, 0.15);
-      --glass-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+      --bg: #1e1e1e;
+      --text-primary: #ffffff;
+      --text-secondary: #b0afac;
+      --glass-bg: rgba(45, 45, 45, 0.7);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     body.solid-mode {
-      --glass-bg: rgba(255, 255, 255, 0.98);
+      --glass-bg: var(--bg);
       --glass-blur: none;
-    }
-
-    body.dark-mode.solid-mode {
-      --glass-bg: rgba(24, 24, 28, 0.98);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--bg);
+      font-family: 'Ubuntu', sans-serif;
+      background: #000; /* System Off State */
       color: var(--text-primary);
-      transition: background 1s ease;
-      height: 100%;
+      transition: background 0.5s ease;
+      height: 100vh;
+      width: 100%;
       overflow: hidden;
     }
 
-    /* Animated Blob Background */
+    /* Boot / Power Screen */
+    #boot-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+
+    .power-on-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 2px solid #333;
+      color: #555;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 0 rgba(53, 132, 228, 0);
+    }
+
+    .power-on-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 30px rgba(53, 132, 228, 0.4);
+      transform: scale(1.1);
+    }
+
+    .boot-label {
+      margin-top: 20px;
+      color: #444;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-weight: 700;
+    }
+
+    /* System On State */
+    body.system-on { background: var(--bg); }
+    body.system-on #boot-screen { opacity: 0; visibility: hidden; }
+
+    .gnome-top-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 500;
+      z-index: 1000;
+    }
+
     .background {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      overflow: hidden;
     }
 
     .blob {
       position: absolute;
       border-radius: 50%;
       filter: blur(80px);
-      opacity: 0.5;
-      transition: background 1s ease;
+      opacity: 0.25;
     }
 
-    .b1 { width: 60vw; height: 60vw; background: var(--blob-1); top: -10%; left: -10%; animation: move 25s infinite alternate; }
-    .b2 { width: 50vw; height: 50vw; background: var(--blob-2); bottom: -10%; right: -10%; animation: move 30s infinite alternate-reverse; }
-    .b3 { width: 40vw; height: 40vw; background: var(--blob-3); top: 20%; right: 20%; animation: move 20s infinite linear; }
+    .b1 { width: 50vw; height: 50vw; background: var(--blob-1); top: -10%; left: -10%; animation: move 25s infinite alternate; }
+    .b2 { width: 40vw; height: 40vw; background: var(--blob-2); bottom: -10%; right: -10%; animation: move 30s infinite alternate-reverse; }
+    .b3 { width: 30vw; height: 30vw; background: var(--blob-3); top: 20%; right: 20%; animation: move 20s infinite linear; }
 
     @keyframes move {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(15vw, 10vh) scale(1.1); }
+      from { transform: translate(0, 0); }
+      to { transform: translate(10vw, 5vh); }
     }
 
     main {
-      height: 100dvh;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -89,154 +143,145 @@
       z-index: 1;
     }
 
-    .card {
+    .profile-card {
       width: 100%;
-      max-width: 500px;
+      max-width: 420px;
       padding: 40px 32px;
       border-radius: var(--radius);
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       border: var(--glass-border);
-      box-shadow: var(--glass-shadow);
       text-align: center;
-      animation: cardEntry 1s ease-out;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      animation: cardEntry 0.5s ease-out;
     }
 
-    @keyframes cardEntry {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-      background: linear-gradient(90deg, var(--text-primary), var(--text-secondary), var(--text-primary));
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shimmer 5s linear infinite;
-    }
-
-    @keyframes shimmer {
-      to { background-position: 200% center; }
-    }
-
-    .tagline {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-    }
-
-    .bio {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: var(--text-secondary);
-      margin-bottom: 24px;
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .social-links a {
-      color: var(--text-primary);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: letter-spacing 0.3s ease, opacity 0.3s ease;
-    }
-
-    .social-links a:hover {
-      letter-spacing: 0.05em;
-      opacity: 0.7;
-    }
-
-    .email-pill {
-      margin-top: 32px;
-      padding: 12px 32px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      background: var(--text-primary);
-      color: var(--bg);
-      border-radius: 999px;
-      text-decoration: none;
-      display: inline-block;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .email-pill:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-
-    .toggle {
+    .weather-bar {
       position: fixed;
-      top: 14px;
-      width: 42px;
-      height: 42px;
+      top: 40px;
+      left: 20px;
+      padding: 12px 16px;
       display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      border-radius: 21px;
+      flex-direction: column;
+      gap: 8px;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       border: var(--glass-border);
-      box-shadow: var(--glass-shadow);
+      border-radius: 12px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      min-width: 180px;
+    }
+
+    .weather-bar.loaded { opacity: 1; transform: translateX(0); }
+
+    .weather-main { display: flex; align-items: center; gap: 10px; }
+    .weather-icon { font-size: 1.4rem; }
+    .weather-temp { font-size: 1.1rem; font-weight: 700; }
+    
+    .weather-details { 
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 12px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding-top: 8px;
+    }
+    body.dark-mode .weather-details { border-top-color: rgba(255,255,255,0.05); }
+
+    .detail-item { display: flex; flex-direction: column; }
+    .detail-label { font-size: 0.5rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 800; }
+    .detail-value { font-size: 0.7rem; font-weight: 600; }
+
+    .power-btn {
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .power-btn:hover { color: #ff4b4b; }
+
+    @keyframes cardEntry {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+    .tagline { font-size: 0.65rem; font-weight: 700; color: var(--accent); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .bio { font-size: 0.95rem; line-height: 1.4; color: var(--text-secondary); margin-bottom: 28px; }
+
+    .social-links { display: flex; justify-content: center; gap: 12px; margin-bottom: 32px; }
+    .social-links a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 6px 10px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+    body.dark-mode .social-links a { background: rgba(255,255,255,0.06); }
+    .social-links a:hover { background: var(--accent); color: white; }
+
+    .email-pill {
+      padding: 10px 32px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(53, 132, 228, 0.2);
+    }
+
+    .toggle {
+      position: fixed;
+      top: 40px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      border-radius: 18px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
       cursor: pointer;
       z-index: 100;
-      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
+      transition: width 0.3s;
     }
+    #theme-toggle { right: 66px; }
+    #glass-toggle { right: 20px; }
+    .toggle:hover { width: 100px; }
+    .toggle-icon { min-width: 36px; text-align: center; }
+    .toggle-text { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; opacity: 0; white-space: nowrap; }
+    .toggle:hover .toggle-text { opacity: 1; }
 
-    /* Fixed widths to prevent text wrapping/clipping */
-    #theme-toggle.expanded { width: 115px; }
-    #glass-toggle.expanded { width: 175px; }
-    
-    .toggle-icon { 
-      min-width: 42px; 
-      height: 42px;
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      font-size: 18px;
-    }
-    
-    .toggle-text {
-      flex: 1;
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      opacity: 0;
-      transition: opacity 0.2s;
-      padding-right: 18px;
-      white-space: nowrap;
-    }
-
-    .toggle.expanded .toggle-text { opacity: 1; }
-
-    #theme-toggle { left: 14px; }
-    #glass-toggle { right: 14px; }
-
-    @media (max-width: 480px) {
-      .social-links { flex-direction: column; gap: 10px; }
+    @media (max-width: 600px) {
+      .weather-bar { top: auto; bottom: 20px; left: 20px; right: 20px; flex-direction: row; justify-content: space-between; align-items: center; }
+      .weather-details { border: none; padding: 0; display: flex; gap: 15px; }
     }
   </style>
 </head>
-<body>
+<body class="dark-mode">
+  <!-- Boot Screen -->
+  <div id="boot-screen">
+    <div class="power-on-btn" id="system-boot">⏻</div>
+    <div class="boot-label">Power On</div>
+  </div>
+
+  <header class="gnome-top-bar">
+    <div>Activities</div>
+    <div id="gnome-clock">--:--</div>
+    <div style="display: flex; gap: 12px;">
+      <span>Kochi</span>
+      <span class="power-btn" id="power-off">⏻</span>
+    </div>
+  </header>
+
   <div class="background">
     <div class="blob b1"></div>
     <div class="blob b2"></div>
@@ -244,34 +289,41 @@
   </div>
 
   <main>
-    <section class="card">
+    <div id="weather-widget" class="weather-bar">
+      <div class="weather-main">
+        <div id="w-icon" class="weather-icon">--</div>
+        <div>
+          <div id="w-temp" class="weather-temp">--°C</div>
+          <div style="font-size: 0.55rem; opacity: 0.7; font-weight: 700;">KOCHI</div>
+        </div>
+      </div>
+      <div class="weather-details">
+        <div class="detail-item"><span class="detail-label">Wind</span><span id="w-wind" class="detail-value">--</span></div>
+        <div class="detail-item"><span class="detail-label">Hum</span><span id="w-humidity" class="detail-value">--</span></div>
+      </div>
+    </div>
+
+    <section class="profile-card">
       <h1>Maanas Adiyodi</h1>
       <div class="tagline">Graphic Designer</div>
-      
-      <p class="bio">
-        From just a hobby to 'Passion' seems to like it rn
-      </p>
-      
+      <p class="bio">From just a hobby to 'Passion' seems to like it rn</p>
       <div class="social-links">
         <a href="https://www.instagram.com/adichitodi" target="_blank">@adichitodi</a>
         <a href="https://www.instagram.com/des1gn.anythin" target="_blank">@des1gn.anythin</a>
         <a href="https://www.instagram.com/cars.gfx" target="_blank">@cars.gfx</a>
       </div>
-
-      <a href="mailto:maanas.rsuresh@gmail.com" class="email-pill">
-        Contact Me
-      </a>
+      <a href="mailto:maanas.rsuresh@gmail.com" class="email-pill">Contact Me</a>
     </section>
   </main>
 
   <div id="theme-toggle" class="toggle">
-    <span id="themeEmoji" class="toggle-icon">☀️</span>
-    <span id="themeLabel" class="toggle-text">Light</span>
+    <span class="toggle-icon" id="themeEmoji">🌙</span>
+    <span class="toggle-text" id="themeLabel">Dark</span>
   </div>
 
   <div id="glass-toggle" class="toggle">
-    <span id="glassIcon" class="toggle-icon">✨</span>
-    <span id="glassLabel" class="toggle-text">Liquid Glass</span>
+    <span class="toggle-icon">✨</span>
+    <span class="toggle-text" id="glassLabel">Liquid</span>
   </div>
 
   <script>
@@ -280,52 +332,70 @@
     const themeEmoji = document.getElementById('themeEmoji');
     const themeLabel = document.getElementById('themeLabel');
     const glassToggle = document.getElementById('glass-toggle');
-    const glassIcon = document.getElementById('glassIcon');
     const glassLabel = document.getElementById('glassLabel');
+    
+    const bootBtn = document.getElementById('system-boot');
+    const powerBtn = document.getElementById('power-off');
 
-    let themeTimer, glassTimer;
-
-    function expandToggle(el, timer) {
-      clearTimeout(timer);
-      el.classList.add('expanded');
-      return setTimeout(() => el.classList.remove('expanded'), 2000);
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('gnome-clock').textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    let isDark = localStorage.getItem('theme') === 'dark';
+    // Booting Logic
+    bootBtn.addEventListener('click', () => {
+      body.classList.add('system-on');
+    });
+
+    // Shut down logic
+    powerBtn.addEventListener('click', () => {
+      body.classList.remove('system-on');
+      // Briefly reset transition for background color
+      setTimeout(() => {
+        // System is now "off"
+      }, 800);
+    });
+
+    // Theme logic
+    let isDark = localStorage.getItem('theme') !== 'light';
     function applyTheme(dark) {
       body.classList.toggle('dark-mode', dark);
       themeEmoji.textContent = dark ? '🌙' : '☀️';
       themeLabel.textContent = dark ? 'Dark' : 'Light';
     }
     applyTheme(isDark);
+    themeToggle.addEventListener('click', () => { isDark = !isDark; applyTheme(isDark); localStorage.setItem('theme', isDark ? 'dark' : 'light'); });
 
-    themeToggle.addEventListener('click', () => {
-      isDark = !isDark;
-      applyTheme(isDark);
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      themeTimer = expandToggle(themeToggle, themeTimer);
-    });
-
-    themeToggle.addEventListener('mouseenter', () => themeToggle.classList.add('expanded'));
-    themeToggle.addEventListener('mouseleave', () => themeToggle.classList.remove('expanded'));
-
+    // Glass logic
     let isSolid = localStorage.getItem('glass') === 'solid';
     function applyGlass(solid) {
       body.classList.toggle('solid-mode', solid);
-      glassIcon.style.opacity = solid ? '0.4' : '1';
-      glassLabel.textContent = solid ? 'Solid' : 'Liquid Glass';
+      glassLabel.textContent = solid ? 'Solid' : 'Liquid';
     }
     applyGlass(isSolid);
+    glassToggle.addEventListener('click', () => { isSolid = !isSolid; applyGlass(isSolid); localStorage.setItem('glass', isSolid ? 'solid' : 'liquid'); });
 
-    glassToggle.addEventListener('click', () => {
-      isSolid = !isSolid;
-      applyGlass(isSolid);
-      localStorage.setItem('glass', isSolid ? 'solid' : 'liquid');
-      glassTimer = expandToggle(glassToggle, glassTimer);
-    });
+    async function fetchWeather() {
+      try {
+        const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=9.9399&longitude=76.2602&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto");
+        const data = await res.json();
+        const current = data.current;
+        const code = current.weather_code;
+        let icon = '☀️';
+        if (code >= 1 && code <= 3) icon = '🌤️';
+        else if (code >= 51 && code <= 67) icon = '🌧️';
+        else if (code >= 95) icon = '⛈️';
 
-    glassToggle.addEventListener('mouseenter', () => glassToggle.classList.add('expanded'));
-    glassToggle.addEventListener('mouseleave', () => glassToggle.classList.remove('expanded'));
+        document.getElementById('w-icon').textContent = icon;
+        document.getElementById('w-temp').textContent = `${Math.round(current.temperature_2m)}°C`;
+        document.getElementById('w-wind').textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+        document.getElementById('w-humidity').textContent = `${current.relative_humidity_2m}%`;
+        document.getElementById('weather-widget').classList.add('loaded');
+      } catch (e) { console.error(e); }
+    }
+    fetchWeather();
   </script>
 </body>
 </html>
