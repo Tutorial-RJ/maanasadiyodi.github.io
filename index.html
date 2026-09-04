@@ -618,7 +618,7 @@
                         <span class="title-text">Maanas</span>
                         <span class="title-text">Adiyodi</span>
                     </div>
-                    <div class="sub">poster artifacts · experimental</div>
+                    <div class="sub">experiments to real-life</div>
                     <div class="scroll-hint">↓ scroll</div>
                 </div>
             </section>
@@ -674,60 +674,28 @@
         const socialStatic = document.getElementById('socialStatic');
         const slidesContainer = document.getElementById('slidesContainer');
         const dots = document.querySelectorAll('.dot');
-        const worksSlide = document.getElementById('works');
 
         let worksData = [];
         let currentSlide = 0;
         const totalSlides = 3;
         let isAnimating = false;
+        let isLoading = true; // Prevent slide changes during loading
 
         // ── PREVENT SCROLL PROPAGATION FROM GRID ──
         function setupGridScroll() {
             grid.addEventListener('wheel', (e) => {
-                const isAtTop = grid.scrollTop === 0;
-                const isAtBottom = grid.scrollHeight - grid.scrollTop - grid.clientHeight < 1;
-                
-                if (e.deltaY < 0 && isAtTop) {
-                    // At top, scrolling up - let parent handle it
-                    e.stopPropagation();
-                    return;
-                }
-                if (e.deltaY > 0 && isAtBottom) {
-                    // At bottom, scrolling down - let parent handle it
-                    e.stopPropagation();
-                    return;
-                }
-                // Otherwise, grid handles the scroll
                 e.stopPropagation();
             }, { passive: true });
 
-            // Touch handling for grid
-            let touchStartY = 0;
-            let touchStartTime = 0;
-            
             grid.addEventListener('touchstart', (e) => {
-                touchStartY = e.changedTouches[0].screenY;
-                touchStartTime = Date.now();
+                e.stopPropagation();
             }, { passive: true });
 
             grid.addEventListener('touchmove', (e) => {
-                // Allow grid to scroll naturally
                 e.stopPropagation();
             }, { passive: true });
 
             grid.addEventListener('touchend', (e) => {
-                const deltaY = touchStartY - e.changedTouches[0].screenY;
-                const deltaTime = Date.now() - touchStartTime;
-                
-                const isAtTop = grid.scrollTop === 0;
-                const isAtBottom = grid.scrollHeight - grid.scrollTop - grid.clientHeight < 1;
-                
-                // If we're at the top and swiping down, or at bottom and swiping up
-                if ((isAtTop && deltaY < 0) || (isAtBottom && deltaY > 0)) {
-                    // Let parent handle it
-                    e.stopPropagation();
-                    return;
-                }
                 e.stopPropagation();
             }, { passive: true });
         }
@@ -796,6 +764,9 @@
         // ── RENDER GALLERY ──
         function renderGallery() {
             grid.innerHTML = '';
+            let loadedCount = 0;
+            const totalImages = worksData.length;
+            
             worksData.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'work-card';
@@ -804,13 +775,24 @@
                 img.alt = `Artwork ${index + 1}`;
                 img.className = 'card-img';
                 img.loading = 'lazy';
+                
                 img.onerror = function() {
                     this.src = 'https://placehold.co/600x800/2a2520/ece4db?text=?';
                     this.classList.add('loaded');
+                    loadedCount++;
+                    if (loadedCount === totalImages) {
+                        isLoading = false;
+                    }
                 };
+                
                 img.onload = function() {
                     this.classList.add('loaded');
+                    loadedCount++;
+                    if (loadedCount === totalImages) {
+                        isLoading = false;
+                    }
                 };
+                
                 card.appendChild(img);
                 card.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -818,6 +800,11 @@
                 });
                 grid.appendChild(card);
             });
+            
+            // Safety timeout - if images take too long, unlock navigation
+            setTimeout(() => {
+                isLoading = false;
+            }, 5000);
         }
 
         // ── RENDER STATIC SOCIAL ──
@@ -835,7 +822,8 @@
 
         // ── SLIDE NAVIGATION ──
         function goToSlide(index) {
-            if (isAnimating || index === currentSlide) return;
+            // Prevent slide changes during loading or animation
+            if (isLoading || isAnimating || index === currentSlide) return;
             if (index < 0 || index >= totalSlides) return;
             
             isAnimating = true;
@@ -867,21 +855,19 @@
             });
         });
 
-        // ── WHEEL SCROLL (with grid check) ──
+        // ── WHEEL SCROLL ──
         let wheelTimeout = false;
         document.addEventListener('wheel', (e) => {
             if (lightboxModal.classList.contains('active')) return;
             
-            // Check if the grid is being scrolled
             const target = e.target;
             const isScrollingGrid = target.closest('.grid');
             
             if (isScrollingGrid) {
-                // Let the grid handle its own scroll
                 return;
             }
             
-            if (wheelTimeout) return;
+            if (wheelTimeout || isLoading) return;
             
             const direction = e.deltaY > 0 ? 1 : -1;
             const nextSlide = currentSlide + direction;
@@ -897,29 +883,24 @@
 
         // ── TOUCH SWIPE ──
         let touchStartYGlobal = 0;
-        let touchStartTimeGlobal = 0;
 
         document.addEventListener('touchstart', (e) => {
             if (lightboxModal.classList.contains('active')) return;
             
-            // Check if touching the grid
             const target = e.target;
             const isTouchingGrid = target.closest('.grid');
             
             if (isTouchingGrid) {
-                // Let grid handle it
                 return;
             }
             
             touchStartYGlobal = e.changedTouches[0].screenY;
-            touchStartTimeGlobal = Date.now();
         }, { passive: true });
 
         document.addEventListener('touchend', (e) => {
             if (lightboxModal.classList.contains('active')) return;
             if (touchStartYGlobal === 0) return;
             
-            // Check if touching the grid
             const target = e.target;
             const isTouchingGrid = target.closest('.grid');
             
@@ -928,10 +909,14 @@
                 return;
             }
             
-            const deltaY = touchStartYGlobal - e.changedTouches[0].screenY;
-            const deltaTime = Date.now() - touchStartTimeGlobal;
+            if (isLoading) {
+                touchStartYGlobal = 0;
+                return;
+            }
             
-            if (Math.abs(deltaY) > 40 && deltaTime < 500) {
+            const deltaY = touchStartYGlobal - e.changedTouches[0].screenY;
+            
+            if (Math.abs(deltaY) > 40) {
                 const direction = deltaY > 0 ? 1 : -1;
                 const nextSlide = currentSlide + direction;
                 if (nextSlide >= 0 && nextSlide < totalSlides) {
@@ -947,6 +932,8 @@
                 if (e.key === 'Escape') closeLightbox();
                 return;
             }
+            
+            if (isLoading) return;
             
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
                 e.preventDefault();
@@ -1080,16 +1067,18 @@
 
         // ── INIT ──
         async function init() {
-            // Show skeletons first
             renderSkeletons(8);
             
             const imageList = await discoverImages();
             worksData = imageList.map(file => ({ image: file }));
             
-            // Small delay to show skeletons
             setTimeout(() => {
                 renderGallery();
                 setupGridScroll();
+                // Unlock navigation after gallery renders
+                setTimeout(() => {
+                    isLoading = false;
+                }, 500);
             }, 300);
             
             renderStaticSocial();
