@@ -6,7 +6,7 @@
     <title>Maanas Adiyodi — Doodle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Patrick+Hand&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         /* ── RESET ── */
@@ -19,47 +19,22 @@
         /* ── VARIABLES ── */
         :root {
             --bg: #faf8f4;
-            --bg-dark: #1a1714;
             --text: #2a2520;
-            --text-dark: #ece4db;
             --text-muted: #7a7268;
             --paper: #fffcf7;
             --accent: #d97a4a;
             --accent2: #4a8c7a;
-            --accent3: #c95a3a;
             --border: 2.5px solid #2a2520;
-            --border-dark: 2.5px solid #ece4db;
             --shadow: 6px 6px 0px #2a2520;
-            --shadow-dark: 6px 6px 0px #ece4db;
         }
 
         body {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Instrument Serif', serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.5;
             padding: 1.5rem;
             min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        body.dark {
-            --bg: #1a1714;
-            --text: #ece4db;
-            --text-muted: #a89a8e;
-            --paper: #24201c;
-            --border: 2.5px solid #ece4db;
-            --border-dark: 2.5px solid #ece4db;
-            --shadow: 6px 6px 0px #ece4db;
-            --shadow-dark: 6px 6px 0px #ece4db;
-            --accent: #d97a4a;
-            --accent2: #5a9c8a;
-            --accent3: #c95a3a;
-        }
-
-        body.dark {
-            background: var(--bg);
-            color: var(--text);
         }
 
         /* ── CANVAS (doodle texture) ── */
@@ -73,10 +48,6 @@
             opacity: 0.25;
             mix-blend-mode: multiply;
         }
-        body.dark #bgCanvas {
-            opacity: 0.15;
-            mix-blend-mode: screen;
-        }
 
         /* ── LAYOUT ── */
         .container {
@@ -86,39 +57,12 @@
             z-index: 1;
         }
 
-        /* ── THEME TOGGLE (doodle style) ── */
-        .theme-toggle {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            z-index: 999;
-            background: var(--paper);
-            color: var(--text);
-            border: var(--border);
-            box-shadow: var(--shadow);
-            padding: 0.4rem 0.9rem;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            transform: rotate(-2deg);
-        }
-        .theme-toggle:hover {
-            transform: rotate(2deg) scale(1.05);
-            background: var(--accent);
-            color: #fff;
-        }
-
-        /* ── HERO (doodle style) ── */
+        /* ── HERO (centered) ── */
         .hero {
-            padding: 2.5rem 0 3rem;
+            padding: 2rem 0 3rem;
             border-bottom: var(--border);
             margin-bottom: 3rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 1.5rem;
+            text-align: center;
             position: relative;
         }
 
@@ -127,69 +71,69 @@
             content: "~~~~~~~~";
             position: absolute;
             bottom: -0.8rem;
-            right: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 1.2rem;
             color: var(--accent);
             letter-spacing: 0.2rem;
-            opacity: 0.4;
+            opacity: 0.3;
             font-family: 'Patrick Hand', cursive;
         }
 
-        .hero-left h1 {
-            font-family: 'Patrick Hand', cursive;
-            font-size: clamp(3.2rem, 10vw, 5.5rem);
-            font-weight: 400;
-            line-height: 0.95;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.2rem;
+        .hero-title {
+            display: inline-block;
             position: relative;
+            margin-bottom: 0.2rem;
+        }
+
+        .hero-title .title-text {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            font-weight: 400;
+            line-height: 0.9;
+            background: linear-gradient(to bottom, #2a2520 0%, #d97a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .title-text:last-child {
+            background: linear-gradient(to bottom, #2a2520 0%, #4a8c7a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* doodle underline */
-        .hero-left h1::after {
+        .hero-title::after {
             content: "";
             position: absolute;
             bottom: 0.2rem;
-            left: 0;
-            width: 100%;
+            left: 5%;
+            width: 90%;
             height: 6px;
             background: var(--accent);
             opacity: 0.3;
             border-radius: 50%;
             transform: rotate(-1deg);
+            pointer-events: none;
         }
 
         .hero-left .sub {
-            font-size: 0.9rem;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.1rem;
             color: var(--text-muted);
             letter-spacing: 0.04em;
             font-weight: 400;
             margin-top: 0.3rem;
         }
 
-        .hero-right {
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        .hero-right .tag {
-            display: inline-block;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            border: var(--border);
-            box-shadow: var(--shadow);
-            padding: 0.3rem 1rem;
-            transform: rotate(2deg);
-            background: var(--paper);
-        }
-        .hero-right .tag span {
-            color: var(--accent);
-        }
-
-        /* ── SOCIAL (doodle) ── */
+        /* ── SOCIAL (top) ── */
         .social-row {
             display: flex;
+            justify-content: center;
             gap: 0.8rem;
             flex-wrap: wrap;
             margin-top: 1.5rem;
@@ -199,8 +143,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 0.85rem;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1rem;
             font-weight: 400;
             color: var(--text);
             text-decoration: none;
@@ -220,19 +164,16 @@
             border-color: var(--accent);
         }
         .social-link i {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
 
         /* ── WORKS ── */
         .works-section {
-            padding-bottom: 3rem;
+            padding-bottom: 2rem;
         }
 
         .section-header {
-            display: flex;
-            align-items: baseline;
-            gap: 1rem;
-            flex-wrap: wrap;
+            text-align: center;
             margin-bottom: 2.5rem;
             padding-bottom: 0.6rem;
             border-bottom: var(--border);
@@ -243,7 +184,8 @@
             content: "⚡⚡⚡";
             position: absolute;
             bottom: -0.6rem;
-            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 0.8rem;
             color: var(--accent2);
             letter-spacing: 0.3rem;
@@ -251,27 +193,18 @@
         }
 
         .section-header h2 {
-            font-family: 'Patrick Hand', cursive;
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 400;
             letter-spacing: 0.02em;
         }
 
-        .section-header .count {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 0.06em;
-            border: var(--border);
-            padding: 0.05rem 0.6rem;
-            background: var(--paper);
-            transform: rotate(-1deg);
-        }
-
-        /* ── GRID ── */
+        /* ── GRID (centered) ── */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1.2rem;
+            justify-items: center;
         }
 
         @media (min-width: 700px) {
@@ -281,7 +214,7 @@
             }
         }
 
-        /* ── CARD (doodle style) ── */
+        /* ── CARD (doodle style, centered) ── */
         .work-card {
             background: var(--paper);
             border: var(--border);
@@ -291,6 +224,8 @@
             transition: all 0.2s ease;
             transform: rotate(var(--rot, 0deg));
             position: relative;
+            width: 100%;
+            max-width: 320px;
         }
 
         .work-card:nth-child(5n+1) { --rot: -1.5deg; }
@@ -355,7 +290,7 @@
             max-width: 100%;
             max-height: 82vh;
             object-fit: contain;
-            border: var(--border-dark);
+            border: var(--border);
             box-shadow: 12px 12px 0px var(--accent);
             background: var(--paper);
         }
@@ -364,8 +299,8 @@
         .lb-nav {
             background: var(--paper);
             color: var(--text);
-            border: var(--border-dark);
-            box-shadow: var(--shadow-dark);
+            border: var(--border);
+            box-shadow: var(--shadow);
             font-size: 1rem;
             cursor: pointer;
             width: 40px;
@@ -375,7 +310,7 @@
             justify-content: center;
             transition: all 0.15s ease;
             position: absolute;
-            font-family: 'Patrick Hand', cursive;
+            font-family: 'Instrument Serif', serif;
         }
         .lb-close:hover,
         .lb-nav:hover {
@@ -399,47 +334,46 @@
             transform: translateY(-50%);
         }
 
-        /* ── FOOTER (doodle) ── */
+        /* ── FOOTER (socials only, centered, sliding) ── */
         .footer {
             border-top: var(--border);
             padding: 2rem 0 1.5rem;
             margin-top: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
+            text-align: center;
             position: relative;
+            overflow: hidden;
         }
 
         .footer::before {
             content: "✧ ✧ ✧";
             position: absolute;
             top: -0.6rem;
-            left: 30%;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 0.8rem;
-            color: var(--accent3);
+            color: var(--accent);
             opacity: 0.3;
             letter-spacing: 0.5rem;
         }
 
-        .footer-left {
+        .footer-inner {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             align-items: center;
-            gap: 1.2rem;
+            gap: 1rem;
         }
 
-        .footer-left .tagline {
-            font-family: 'Patrick Hand', cursive;
+        .footer .tagline {
+            font-family: 'Instrument Serif', serif;
             font-size: 1.2rem;
             font-weight: 400;
             letter-spacing: 0.02em;
+            color: var(--text-muted);
         }
 
         .footer-email a {
-            font-family: 'Patrick Hand', cursive;
-            font-size: 0.9rem;
+            font-family: 'Instrument Serif', serif;
+            font-size: 1rem;
             font-weight: 400;
             color: var(--text);
             text-decoration: none;
@@ -451,23 +385,41 @@
             border-color: var(--text);
         }
 
-        .footer-right {
+        /* ── SOCIAL SLIDER ── */
+        .social-slider {
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            margin: 0.5rem auto 0;
+            position: relative;
+        }
+
+        .social-track {
             display: flex;
-            align-items: center;
             gap: 1rem;
-            flex-wrap: wrap;
+            animation: scrollSocial 20s linear infinite;
+            width: max-content;
         }
 
-        .footer-right .copy {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            letter-spacing: 0.04em;
-            font-family: 'Patrick Hand', cursive;
+        .social-track .social-link {
+            flex-shrink: 0;
+            font-family: 'Instrument Serif', serif;
+            font-size: 0.9rem;
+            padding: 0.3rem 1rem;
+            white-space: nowrap;
         }
 
-        .footer-right .social-link {
-            font-size: 0.75rem;
-            padding: 0.15rem 0.7rem;
+        @keyframes scrollSocial {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .social-slider:hover .social-track {
+            animation-play-state: paused;
         }
 
         /* ── RESPONSIVE ── */
@@ -475,71 +427,37 @@
             body { padding: 1rem; }
 
             .hero {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.8rem;
                 padding-top: 1.5rem;
                 padding-bottom: 2rem;
             }
             .hero::after {
-                right: 0.5rem;
                 font-size: 0.8rem;
             }
-            .hero-right {
-                text-align: left;
-                width: 100%;
+
+            .hero-title .title-text {
+                font-size: clamp(2.4rem, 8vw, 3.8rem);
+            }
+            .hero-title::after {
+                height: 4px;
+                bottom: 0.1rem;
             }
 
             .grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
                 gap: 0.8rem;
             }
 
             .work-card {
                 --rot: 0deg !important;
+                max-width: 280px;
             }
             .work-card::before {
                 display: none;
             }
 
-            .footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.8rem;
-            }
-            .footer::before {
-                left: 10%;
-            }
-            .footer-right {
-                width: 100%;
-                justify-content: flex-start;
-            }
-
-            .lb-close {
-                top: 0.2rem;
-                right: 0.2rem;
-                width: 34px;
-                height: 34px;
+            .social-track .social-link {
                 font-size: 0.8rem;
-            }
-            .lb-prev,
-            .lb-next {
-                width: 34px;
-                height: 34px;
-                font-size: 0.8rem;
-            }
-            .lb-prev {
-                left: 0.2rem;
-            }
-            .lb-next {
-                right: 0.2rem;
-            }
-
-            .theme-toggle {
-                bottom: 1rem;
-                right: 1rem;
-                padding: 0.3rem 0.7rem;
-                font-size: 0.8rem;
+                padding: 0.2rem 0.7rem;
             }
         }
 
@@ -548,15 +466,36 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 0.6rem;
             }
-            .hero-left h1 {
-                font-size: clamp(2.4rem, 12vw, 3.2rem);
+
+            .hero-title .title-text {
+                font-size: clamp(1.8rem, 7vw, 2.8rem);
             }
-            .hero-left h1::after {
-                height: 4px;
-                bottom: 0.1rem;
-            }
+
             .section-header h2 {
-                font-size: clamp(1.4rem, 6vw, 2rem);
+                font-size: clamp(1.6rem, 6vw, 2.2rem);
+            }
+            .work-card {
+                max-width: 200px;
+            }
+            .social-track {
+                gap: 0.6rem;
+            }
+            .social-track .social-link {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.6rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero-title .title-text {
+                font-size: clamp(1.4rem, 6vw, 2.2rem);
+            }
+            .grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            .work-card {
+                max-width: 150px;
             }
         }
     </style>
@@ -566,15 +505,15 @@
     <!-- Canvas -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle">⚡ doodle</button>
-
     <div class="container">
 
         <!-- HERO -->
         <section class="hero">
             <div class="hero-left">
-                <h1>Maanas<br />Adiyodi</h1>
+                <div class="hero-title">
+                    <span class="title-text">Maanas</span>
+                    <span class="title-text">Adiyodi</span>
+                </div>
                 <div class="sub">poster artifacts · experimental</div>
                 <div class="social-row">
                     <a href="https://instagram.com/adichitodi" target="_blank" class="social-link">
@@ -582,33 +521,28 @@
                     </a>
                 </div>
             </div>
-            <div class="hero-right">
-                <div class="tag"><span>✦</span> still &amp; motion</div>
-            </div>
         </section>
 
         <!-- WORKS -->
         <section class="works-section">
             <div class="section-header">
                 <h2>Works</h2>
-                <span class="count">7 pieces</span>
             </div>
             <div class="grid" id="dynamicGrid"></div>
         </section>
 
         <!-- FOOTER -->
         <footer class="footer">
-            <div class="footer-left">
+            <div class="footer-inner">
                 <span class="tagline">let's create</span>
                 <div class="footer-email">
                     <a href="mailto:maanas.rsuresh@gmail.com">maanas.rsuresh@gmail.com</a>
                 </div>
-            </div>
-            <div class="footer-right">
-                <a href="https://instagram.com/adichitodi" target="_blank" class="social-link">
-                    <i class="fab fa-instagram"></i> @adichitodi
-                </a>
-                <span class="copy">✦ 2026</span>
+                <div class="social-slider">
+                    <div class="social-track" id="socialTrack">
+                        <!-- injected by JS -->
+                    </div>
+                </div>
             </div>
         </footer>
 
@@ -636,6 +570,11 @@
             { image: '7.jpg' }
         ];
 
+        const socialLinks = [
+            { icon: 'fa-instagram', label: '@adichitodi', url: 'https://instagram.com/adichitodi' },
+            { icon: 'fa-pinterest', label: 'Pinterest', url: 'https://www.pinterest.com/des1gnanythin/' },
+        ];
+
         // ── SHUFFLE ──
         function shuffleArray(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -655,9 +594,9 @@
         const closeBtn = document.getElementById('closeLightboxBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const themeBtn = document.getElementById('themeToggle');
+        const socialTrack = document.getElementById('socialTrack');
 
-        // ── RENDER ──
+        // ── RENDER GALLERY ──
         function renderGallery() {
             grid.innerHTML = '';
             shuffledWorks.forEach((item, index) => {
@@ -667,6 +606,20 @@
                     `<img src="${item.image}" alt="Artwork ${index + 1}" class="card-img" loading="lazy" onerror="this.src='https://placehold.co/600x800/2a2520/ece4db?text=?'" />`;
                 card.addEventListener('click', () => openLightbox(index));
                 grid.appendChild(card);
+            });
+        }
+
+        // ── RENDER SOCIAL SLIDER ──
+        function renderSocialSlider() {
+            const doubled = [...socialLinks, ...socialLinks];
+            socialTrack.innerHTML = '';
+            doubled.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = '_blank';
+                a.className = 'social-link';
+                a.innerHTML = `<i class="fab ${link.icon}"></i> ${link.label}`;
+                socialTrack.appendChild(a);
             });
         }
 
@@ -701,11 +654,6 @@
             if (e.key === 'Escape') closeLightbox();
             if (e.key === 'ArrowRight') navigateLightbox(1);
             if (e.key === 'ArrowLeft') navigateLightbox(-1);
-        });
-
-        // ── THEME ──
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
         });
 
         // ── CANVAS (doodle marks) ──
@@ -747,22 +695,16 @@
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                const isDark = document.body.classList.contains('dark');
-                ctx.strokeStyle = isDark ?
-                    `rgba(220, 210, 200, ${this.alpha * 0.5})` :
-                    `rgba(42, 37, 32, ${this.alpha})`;
+                ctx.strokeStyle = `rgba(42, 37, 32, ${this.alpha})`;
                 ctx.lineWidth = 1.2;
 
                 if (this.shape === 0) {
-                    // square
                     ctx.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size);
                 } else if (this.shape === 1) {
-                    // circle
                     ctx.beginPath();
                     ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
                     ctx.stroke();
                 } else if (this.shape === 2) {
-                    // cross
                     ctx.beginPath();
                     ctx.moveTo(-this.size / 2, 0);
                     ctx.lineTo(this.size / 2, 0);
@@ -770,7 +712,6 @@
                     ctx.lineTo(0, this.size / 2);
                     ctx.stroke();
                 } else {
-                    // triangle
                     ctx.beginPath();
                     ctx.moveTo(0, -this.size / 2);
                     ctx.lineTo(this.size / 2, this.size / 2);
@@ -805,7 +746,9 @@
             requestAnimationFrame(animateCanvas);
         }
 
+        // ── INIT ──
         renderGallery();
+        renderSocialSlider();
         animateCanvas();
     </script>
 </body>
