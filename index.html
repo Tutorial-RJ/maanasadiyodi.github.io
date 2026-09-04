@@ -29,8 +29,9 @@
         }
 
         html {
-            height: 100vh;
-            overflow: hidden;
+            scroll-behavior: smooth;
+            overflow-y: auto;
+            height: 100%;
         }
 
         body {
@@ -38,13 +39,10 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.5;
-            height: 100vh;
-            overflow: hidden;
-            position: fixed;
+            min-height: 100vh;
+            overflow-y: auto;
+            position: relative;
             width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
         }
 
         /* ── PAPER CRUMPLED TEXTURE OVERLAY ── */
@@ -91,56 +89,28 @@
             mix-blend-mode: multiply;
         }
 
-        /* ── SLIDES WRAPPER ── */
-        .slides-wrapper {
+        /* ── CONTENT WRAPPER ── */
+        .content-wrapper {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
             z-index: 2;
-        }
-
-        /* ── SLIDES CONTAINER (animated) ── */
-        .slides-container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: transform;
-        }
-
-        /* ── SLIDES ── */
-        .slide {
-            flex: 0 0 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem 1.2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container {
             max-width: 1400px;
-            width: 100%;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            padding: 0 0.5rem;
+            padding: 2rem 1.2rem 4rem;
         }
 
         /* ── HERO ── */
         .hero {
             text-align: center;
+            padding: 4rem 0 3rem;
+            position: relative;
+            border-bottom: var(--border);
+            margin-bottom: 3rem;
         }
 
         .hero::after {
             content: "~~~~~~~~";
             position: absolute;
-            bottom: 2.5rem;
+            bottom: -0.8rem;
             left: 50%;
             transform: translateX(-50%);
             font-size: 1rem;
@@ -159,7 +129,7 @@
 
         .hero-title .title-text {
             font-family: 'Instrument Serif', serif;
-            font-size: clamp(2.8rem, 12vw, 5.5rem);
+            font-size: clamp(3rem, 12vw, 5.5rem);
             font-weight: 400;
             line-height: 0.9;
             background: linear-gradient(to bottom, #2a2520 0%, #d97a4a 100%);
@@ -200,42 +170,25 @@
             margin-top: 0.3rem;
         }
 
-        .scroll-hint {
-            margin-top: 2rem;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            opacity: 0.4;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(5px); }
-        }
-
         /* ── WORKS ── */
         .works-section {
-            padding: 0.5rem 0;
-            width: 100%;
-            height: 100%;
-            justify-content: flex-start;
-            padding-top: 1rem;
+            padding: 1rem 0 3rem;
+            border-bottom: var(--border);
+            margin-bottom: 3rem;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.4rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.6rem;
             border-bottom: var(--border);
             position: relative;
-            flex-shrink: 0;
         }
 
         .section-header::after {
             content: "⚡⚡⚡";
             position: absolute;
-            bottom: -0.5rem;
+            bottom: -0.6rem;
             left: 50%;
             transform: translateX(-50%);
             font-size: 0.6rem;
@@ -246,7 +199,7 @@
 
         .section-header h2 {
             font-family: 'Instrument Serif', serif;
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 400;
             letter-spacing: 0.02em;
         }
@@ -256,22 +209,7 @@
             column-count: 2;
             column-gap: 0.8rem;
             width: 100%;
-            max-height: 70vh;
-            overflow-y: auto;
-            padding: 0.3rem 0.2rem 0.8rem;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-        }
-
-        .grid::-webkit-scrollbar {
-            width: 4px;
-        }
-        .grid::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .grid::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
+            padding: 0.3rem 0.2rem;
         }
 
         @media (min-width: 500px) {
@@ -285,7 +223,6 @@
             .grid {
                 column-count: 4;
                 column-gap: 1.2rem;
-                max-height: 74vh;
             }
         }
 
@@ -293,7 +230,6 @@
             .grid {
                 column-count: 5;
                 column-gap: 1.2rem;
-                max-height: 76vh;
             }
         }
 
@@ -301,7 +237,6 @@
             .grid {
                 column-count: 6;
                 column-gap: 1.2rem;
-                max-height: 78vh;
             }
         }
 
@@ -309,7 +244,6 @@
             .grid {
                 column-count: 7;
                 column-gap: 1.2rem;
-                max-height: 80vh;
             }
         }
 
@@ -411,20 +345,20 @@
         }
 
         /* ── CONTACT ── */
-        .contact-slide {
+        .contact-section {
             text-align: center;
-            padding: 1.5rem 1.2rem;
+            padding: 2rem 0 1rem;
         }
 
-        .contact-slide .contact-title {
+        .contact-section .contact-title {
             font-family: 'Instrument Serif', serif;
-            font-size: clamp(2.2rem, 8vw, 3.8rem);
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: 400;
             margin-bottom: 1rem;
             letter-spacing: 0.02em;
         }
 
-        .contact-slide .contact-title span {
+        .contact-section .contact-title span {
             background: linear-gradient(to bottom, #2a2520 0%, #d97a4a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -460,7 +394,7 @@
             word-break: break-all;
         }
 
-        .contact-item a:active {
+        .contact-item a:hover {
             border-color: var(--text);
         }
 
@@ -477,7 +411,7 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            margin: 1.2rem auto 0;
+            margin: 1.5rem auto 0;
             padding: 0.5rem;
         }
 
@@ -497,9 +431,13 @@
             touch-action: manipulation;
         }
 
-        .social-static .social-link:active {
+        .social-static .social-link:hover {
             background: var(--accent);
             color: #fff;
+            transform: scale(1.02);
+        }
+
+        .social-static .social-link:active {
             transform: scale(0.95);
         }
 
@@ -569,83 +507,42 @@
             touch-action: manipulation;
         }
 
-        .lb-close:active {
+        .lb-close:hover {
             background: var(--accent);
             color: #fff;
+            transform: scale(1.05);
+        }
+
+        .lb-close:active {
             transform: scale(0.92);
-        }
-
-        /* ── PROGRESS DOTS ── */
-        .progress-dots {
-            position: fixed;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            pointer-events: none;
-        }
-
-        .progress-dots .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            border: var(--border);
-            background: var(--bg);
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            pointer-events: auto;
-            cursor: pointer;
-        }
-
-        .progress-dots .dot.active {
-            background: var(--accent);
-            transform: scale(1.3);
-            border-color: var(--accent);
-        }
-
-        .progress-dots .dot:active {
-            transform: scale(0.8);
-        }
-
-        @media (max-width: 600px) {
-            .progress-dots {
-                right: 0.5rem;
-                gap: 0.4rem;
-            }
-            .progress-dots .dot {
-                width: 6px;
-                height: 6px;
-            }
         }
 
         /* ── RESPONSIVE ── */
         @media (max-width: 400px) {
-            .slide { padding: 1rem 0.8rem; }
-            .hero::after { font-size: 0.7rem; bottom: 1.8rem; }
+            .content-wrapper { padding: 1rem 0.8rem 2rem; }
+            .hero { padding: 2rem 0 2rem; }
             .hero-title .title-text { font-size: clamp(2.2rem, 10vw, 2.8rem); }
-            .grid { column-gap: 0.5rem; max-height: 55vh; }
+            .grid { column-gap: 0.5rem; }
             .work-card { margin-bottom: 0.5rem; }
             .work-card::before { display: none; }
-            .contact-slide .contact-title { font-size: clamp(1.8rem, 7vw, 2.4rem); }
+            .contact-section .contact-title { font-size: clamp(1.8rem, 7vw, 2.4rem); }
             .contact-item { font-size: 0.85rem; }
             .social-static .social-link { font-size: 0.75rem; padding: 0.3rem 0.9rem; }
             .social-static { gap: 0.6rem; }
             .skeleton { min-height: 80px; }
         }
 
+        @media (min-width: 401px) and (max-width: 600px) {
+            .grid { column-gap: 0.7rem; }
+        }
+
         @media (orientation: landscape) and (max-height: 500px) {
-            .slide { padding: 0.8rem 1rem; }
-            .hero::after { display: none; }
+            .hero { padding: 1.5rem 0 1.5rem; }
             .hero-title .title-text { font-size: clamp(1.8rem, 6vw, 2.8rem); }
-            .scroll-hint { display: none; }
-            .grid { max-height: 50vh; }
-            .section-header { margin-bottom: 0.5rem; }
-            .section-header h2 { font-size: clamp(1.4rem, 3vw, 2rem); }
-            .contact-slide .contact-title { font-size: clamp(1.6rem, 4vw, 2.4rem); }
-            .contact-divider { margin: 0.5rem auto; }
-            .social-static { margin: 0.5rem auto 0; }
+            .hero::after { display: none; }
+            .works-section { padding: 0.5rem 0 1.5rem; }
+            .contact-section { padding: 1rem 0 0.5rem; }
+            .social-static { margin: 0.8rem auto 0; }
             .social-static .social-link { padding: 0.2rem 0.8rem; font-size: 0.8rem; }
             .skeleton { min-height: 60px; }
         }
@@ -659,55 +556,39 @@
     <!-- Canvas -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- Progress Dots -->
-    <div class="progress-dots" id="progressDots">
-        <div class="dot active" data-index="0"></div>
-        <div class="dot" data-index="1"></div>
-        <div class="dot" data-index="2"></div>
-    </div>
+    <!-- CONTENT WRAPPER -->
+    <div class="content-wrapper">
 
-    <!-- SLIDES WRAPPER -->
-    <div class="slides-wrapper">
-        <div class="slides-container" id="slidesContainer">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-title">
+                <span class="title-text">Maanas</span>
+                <span class="title-text">Adiyodi</span>
+            </div>
+            <div class="sub">experiments to real-life</div>
+        </section>
 
-            <!-- SLIDE 1: HERO -->
-            <section class="slide hero" id="home">
-                <div class="container">
-                    <div class="hero-title">
-                        <span class="title-text">Maanas</span>
-                        <span class="title-text">Adiyodi</span>
-                    </div>
-                    <div class="sub">experiments to real-life</div>
-                    <div class="scroll-hint">↓ scroll</div>
-                </div>
-            </section>
+        <!-- WORKS -->
+        <section class="works-section">
+            <div class="section-header">
+                <h2>Works</h2>
+            </div>
+            <div class="grid" id="dynamicGrid"></div>
+        </section>
 
-            <!-- SLIDE 2: WORKS -->
-            <section class="slide works-section" id="works">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Works</h2>
-                    </div>
-                    <div class="grid" id="dynamicGrid"></div>
-                </div>
-            </section>
+        <!-- CONTACT -->
+        <section class="contact-section">
+            <div class="contact-title"><span>let's create</span></div>
+            <div class="contact-divider"></div>
+            <div class="contact-item">
+                <i class="fa-regular fa-envelope"></i>
+                <a href="mailto:maanas.rsuresh@gmail.com">maanas.rsuresh@gmail.com</a>
+            </div>
+            <div class="social-static" id="socialStatic">
+                <!-- injected by JS -->
+            </div>
+        </section>
 
-            <!-- SLIDE 3: CONTACT -->
-            <section class="slide contact-slide" id="contact">
-                <div class="container">
-                    <div class="contact-title"><span>let's create</span></div>
-                    <div class="contact-divider"></div>
-                    <div class="contact-item">
-                        <i class="fa-regular fa-envelope"></i>
-                        <a href="mailto:maanas.rsuresh@gmail.com">maanas.rsuresh@gmail.com</a>
-                    </div>
-                    <div class="social-static" id="socialStatic">
-                        <!-- injected by JS -->
-                    </div>
-                </div>
-            </section>
-
-        </div>
     </div>
 
     <!-- LIGHTBOX -->
@@ -731,33 +612,9 @@
         const lightboxImg = document.getElementById('lightboxImage');
         const closeBtn = document.getElementById('closeLightboxBtn');
         const socialStatic = document.getElementById('socialStatic');
-        const slidesContainer = document.getElementById('slidesContainer');
-        const dots = document.querySelectorAll('.dot');
 
         let worksData = [];
-        let currentSlide = 0;
-        const totalSlides = 3;
-        let isAnimating = false;
         let isLoading = true;
-
-        // ── PREVENT SCROLL PROPAGATION FROM GRID ──
-        function setupGridScroll() {
-            grid.addEventListener('wheel', (e) => {
-                e.stopPropagation();
-            }, { passive: true });
-
-            grid.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-            }, { passive: true });
-
-            grid.addEventListener('touchmove', (e) => {
-                e.stopPropagation();
-            }, { passive: true });
-
-            grid.addEventListener('touchend', (e) => {
-                e.stopPropagation();
-            }, { passive: true });
-        }
 
         // ── AUTO-DETECT IMAGES ──
         async function discoverImages() {
@@ -805,7 +662,7 @@
             }
             
             console.warn('⚠️ No images found, using fallback');
-            return ['1.jpg', '2.jpg', '3.png', '4.jpg', '5.jpeg', '6.jpg', '7.jpg', '8.jpg'];
+            return ['1.jpg', '2.jpg', '3.png', '4.jpg', '5.jpeg', '6.jpg', '7.jpg'];
         }
 
         // ── RENDER SKELETONS ──
@@ -878,129 +735,6 @@
             });
         }
 
-        // ── SLIDE NAVIGATION ──
-        function goToSlide(index) {
-            if (isLoading || isAnimating || index === currentSlide) return;
-            if (index < 0 || index >= totalSlides) return;
-            
-            isAnimating = true;
-            currentSlide = index;
-            
-            slidesContainer.style.transform = `translateY(-${index * 100}vh)`;
-            
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-            
-            setTimeout(() => {
-                isAnimating = false;
-            }, 850);
-        }
-
-        // ── DOT CLICK ──
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                if (!lightboxModal.classList.contains('active')) {
-                    goToSlide(index);
-                }
-            });
-            dot.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (!lightboxModal.classList.contains('active')) {
-                    goToSlide(index);
-                }
-            });
-        });
-
-        // ── WHEEL SCROLL ──
-        let wheelTimeout = false;
-        document.addEventListener('wheel', (e) => {
-            if (lightboxModal.classList.contains('active')) return;
-            
-            const target = e.target;
-            const isScrollingGrid = target.closest('.grid');
-            
-            if (isScrollingGrid) {
-                return;
-            }
-            
-            if (wheelTimeout || isLoading) return;
-            
-            const direction = e.deltaY > 0 ? 1 : -1;
-            const nextSlide = currentSlide + direction;
-            
-            if (nextSlide >= 0 && nextSlide < totalSlides) {
-                wheelTimeout = true;
-                goToSlide(nextSlide);
-                setTimeout(() => {
-                    wheelTimeout = false;
-                }, 900);
-            }
-        }, { passive: true });
-
-        // ── TOUCH SWIPE ──
-        let touchStartYGlobal = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            if (lightboxModal.classList.contains('active')) return;
-            
-            const target = e.target;
-            const isTouchingGrid = target.closest('.grid');
-            
-            if (isTouchingGrid) {
-                return;
-            }
-            
-            touchStartYGlobal = e.changedTouches[0].screenY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            if (lightboxModal.classList.contains('active')) return;
-            if (touchStartYGlobal === 0) return;
-            
-            const target = e.target;
-            const isTouchingGrid = target.closest('.grid');
-            
-            if (isTouchingGrid) {
-                touchStartYGlobal = 0;
-                return;
-            }
-            
-            if (isLoading) {
-                touchStartYGlobal = 0;
-                return;
-            }
-            
-            const deltaY = touchStartYGlobal - e.changedTouches[0].screenY;
-            
-            if (Math.abs(deltaY) > 40) {
-                const direction = deltaY > 0 ? 1 : -1;
-                const nextSlide = currentSlide + direction;
-                if (nextSlide >= 0 && nextSlide < totalSlides) {
-                    goToSlide(nextSlide);
-                }
-            }
-            touchStartYGlobal = 0;
-        }, { passive: true });
-
-        // ── KEYBOARD NAV ──
-        document.addEventListener('keydown', (e) => {
-            if (lightboxModal.classList.contains('active')) {
-                if (e.key === 'Escape') closeLightbox();
-                return;
-            }
-            
-            if (isLoading) return;
-            
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                e.preventDefault();
-                goToSlide(currentSlide + 1);
-            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                e.preventDefault();
-                goToSlide(currentSlide - 1);
-            }
-        });
-
         // ── LIGHTBOX ──
         function openLightbox(index) {
             lightboxImg.src = worksData[index].image;
@@ -1018,6 +752,12 @@
         closeBtn.addEventListener('click', closeLightbox);
         lightboxModal.addEventListener('click', (e) => {
             if (e.target === lightboxModal) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (lightboxModal.classList.contains('active') && e.key === 'Escape') {
+                closeLightbox();
+            }
         });
 
         // ── SWIPE TO CLOSE LIGHTBOX ──
@@ -1131,7 +871,6 @@
             
             setTimeout(() => {
                 renderGallery();
-                setupGridScroll();
                 setTimeout(() => {
                     isLoading = false;
                 }, 500);
@@ -1139,8 +878,6 @@
             
             renderStaticSocial();
             animateCanvas();
-            
-            slidesContainer.style.transform = 'translateY(0)';
         }
 
         init();
