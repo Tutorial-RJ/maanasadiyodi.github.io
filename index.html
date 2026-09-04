@@ -47,15 +47,47 @@
             left: 0;
         }
 
-        /* ── CANVAS ── */
-        #bgCanvas {
+        /* ── PAPER CRUMPLED TEXTURE OVERLAY ── */
+        #paperTexture {
             position: fixed;
             inset: 0;
             width: 100vw;
             height: 100vh;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.2;
+            opacity: 0.15;
+            mix-blend-mode: multiply;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(180, 160, 140, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(160, 140, 120, 0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 30% 60%, rgba(200, 180, 160, 0.05) 0%, transparent 30%),
+                radial-gradient(ellipse at 70% 30%, rgba(170, 150, 130, 0.07) 0%, transparent 35%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(180, 160, 140, 0.02) 2px,
+                    rgba(180, 160, 140, 0.02) 4px
+                ),
+                repeating-linear-gradient(
+                    -45deg,
+                    transparent,
+                    transparent 3px,
+                    rgba(160, 140, 120, 0.015) 3px,
+                    rgba(160, 140, 120, 0.015) 6px
+                ),
+                radial-gradient(ellipse at 50% 50%, rgba(200, 185, 170, 0.03) 0%, transparent 70%);
+        }
+
+        /* ── CANVAS (doodle marks) ── */
+        #bgCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.3;
             mix-blend-mode: multiply;
         }
 
@@ -65,7 +97,7 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            z-index: 1;
+            z-index: 2;
         }
 
         /* ── SLIDES CONTAINER (animated) ── */
@@ -242,7 +274,6 @@
             border-radius: 4px;
         }
 
-        /* ── RESPONSIVE GRID COLUMNS ── */
         @media (min-width: 500px) {
             .grid {
                 column-count: 3;
@@ -622,6 +653,9 @@
 </head>
 <body>
 
+    <!-- Paper Crumpled Texture -->
+    <div id="paperTexture"></div>
+
     <!-- Canvas -->
     <canvas id="bgCanvas"></canvas>
 
@@ -777,7 +811,7 @@
         // ── RENDER SKELETONS ──
         function renderSkeletons(count) {
             grid.innerHTML = '';
-            const skeletonCount = count || 8;
+            const skeletonCount = count || 12;
             for (let i = 0; i < skeletonCount; i++) {
                 const skeleton = document.createElement('div');
                 skeleton.className = 'skeleton';
