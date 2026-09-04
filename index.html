@@ -92,7 +92,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1400px;
             width: 100%;
             margin: 0 auto;
             position: relative;
@@ -242,6 +242,7 @@
             border-radius: 4px;
         }
 
+        /* ── RESPONSIVE GRID COLUMNS ── */
         @media (min-width: 500px) {
             .grid {
                 column-count: 3;
@@ -251,9 +252,33 @@
 
         @media (min-width: 768px) {
             .grid {
-                column-count: 3;
-                column-gap: 1.5rem;
+                column-count: 4;
+                column-gap: 1.2rem;
                 max-height: 74vh;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                column-count: 5;
+                column-gap: 1.2rem;
+                max-height: 76vh;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .grid {
+                column-count: 6;
+                column-gap: 1.2rem;
+                max-height: 78vh;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .grid {
+                column-count: 7;
+                column-gap: 1.2rem;
+                max-height: 80vh;
             }
         }
 
@@ -679,7 +704,7 @@
         let currentSlide = 0;
         const totalSlides = 3;
         let isAnimating = false;
-        let isLoading = true; // Prevent slide changes during loading
+        let isLoading = true;
 
         // ── PREVENT SCROLL PROPAGATION FROM GRID ──
         function setupGridScroll() {
@@ -801,7 +826,6 @@
                 grid.appendChild(card);
             });
             
-            // Safety timeout - if images take too long, unlock navigation
             setTimeout(() => {
                 isLoading = false;
             }, 5000);
@@ -822,7 +846,6 @@
 
         // ── SLIDE NAVIGATION ──
         function goToSlide(index) {
-            // Prevent slide changes during loading or animation
             if (isLoading || isAnimating || index === currentSlide) return;
             if (index < 0 || index >= totalSlides) return;
             
@@ -1067,7 +1090,7 @@
 
         // ── INIT ──
         async function init() {
-            renderSkeletons(8);
+            renderSkeletons(12);
             
             const imageList = await discoverImages();
             worksData = imageList.map(file => ({ image: file }));
@@ -1075,7 +1098,6 @@
             setTimeout(() => {
                 renderGallery();
                 setupGridScroll();
-                // Unlock navigation after gallery renders
                 setTimeout(() => {
                     isLoading = false;
                 }, 500);
