@@ -25,6 +25,7 @@
             --accent2: #4a8c7a;
             --border: 2.5px solid #2a2520;
             --shadow: 6px 6px 0px #2a2520;
+            --skeleton-bg: #e8e4de;
         }
 
         html {
@@ -187,12 +188,12 @@
             width: 100%;
             height: 100%;
             justify-content: flex-start;
-            padding-top: 1.5rem;
+            padding-top: 1rem;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
             padding-bottom: 0.4rem;
             border-bottom: var(--border);
             position: relative;
@@ -218,45 +219,47 @@
             letter-spacing: 0.02em;
         }
 
+        /* ── PINTEREST-STYLE MASONRY GRID ── */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
-            justify-items: center;
+            column-count: 2;
+            column-gap: 0.8rem;
             width: 100%;
-            max-height: 60vh;
+            max-height: 70vh;
             overflow-y: auto;
             padding: 0.3rem 0.2rem 0.8rem;
             -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
 
         .grid::-webkit-scrollbar {
-            width: 3px;
+            width: 4px;
         }
         .grid::-webkit-scrollbar-track {
             background: transparent;
         }
         .grid::-webkit-scrollbar-thumb {
             background: var(--accent);
-            border-radius: 3px;
+            border-radius: 4px;
         }
 
         @media (min-width: 500px) {
             .grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1rem;
+                column-count: 3;
+                column-gap: 1rem;
             }
         }
 
         @media (min-width: 768px) {
             .grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1.5rem;
-                max-height: 70vh;
+                column-count: 3;
+                column-gap: 1.5rem;
+                max-height: 74vh;
             }
         }
 
         .work-card {
+            break-inside: avoid;
+            margin-bottom: 0.8rem;
             background: var(--paper);
             border: var(--border);
             box-shadow: var(--shadow);
@@ -266,7 +269,6 @@
             transform: rotate(var(--rot, 0deg));
             position: relative;
             width: 100%;
-            max-width: 280px;
             touch-action: manipulation;
         }
 
@@ -297,12 +299,59 @@
             display: block;
             vertical-align: bottom;
             filter: grayscale(0.1);
-            transition: filter 0.25s ease;
+            transition: filter 0.25s ease, opacity 0.4s ease;
             aspect-ratio: auto;
+            opacity: 0;
+        }
+
+        .card-img.loaded {
+            opacity: 1;
         }
 
         .work-card:active .card-img {
             filter: grayscale(0);
+        }
+
+        /* ── SKELETON LOADING ── */
+        .skeleton {
+            background: var(--skeleton-bg);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            break-inside: avoid;
+            margin-bottom: 0.8rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+
+        .skeleton::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer-sweep 1.5s ease-in-out infinite;
+        }
+
+        @keyframes shimmer-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .skeleton .skeleton-bar {
+            width: 100%;
+            padding-bottom: 120%;
+            background: var(--skeleton-bg);
+            display: block;
         }
 
         /* ── CONTACT ── */
@@ -367,7 +416,6 @@
             flex-shrink: 0;
         }
 
-        /* ── STATIC SOCIAL LINKS (replaces scroll) ── */
         .social-static {
             display: flex;
             justify-content: center;
@@ -521,18 +569,14 @@
             .slide { padding: 1rem 0.8rem; }
             .hero::after { font-size: 0.7rem; bottom: 1.8rem; }
             .hero-title .title-text { font-size: clamp(2.2rem, 10vw, 2.8rem); }
-            .grid { gap: 0.5rem; max-height: 55vh; }
-            .work-card { max-width: 140px; }
+            .grid { column-gap: 0.5rem; max-height: 55vh; }
+            .work-card { margin-bottom: 0.5rem; }
             .work-card::before { display: none; }
             .contact-slide .contact-title { font-size: clamp(1.8rem, 7vw, 2.4rem); }
             .contact-item { font-size: 0.85rem; }
             .social-static .social-link { font-size: 0.75rem; padding: 0.3rem 0.9rem; }
             .social-static { gap: 0.6rem; }
-        }
-
-        @media (min-width: 401px) and (max-width: 600px) {
-            .grid { gap: 0.7rem; }
-            .work-card { max-width: 170px; }
+            .skeleton { min-height: 80px; }
         }
 
         @media (orientation: landscape) and (max-height: 500px) {
@@ -547,6 +591,7 @@
             .contact-divider { margin: 0.5rem auto; }
             .social-static { margin: 0.5rem auto 0; }
             .social-static .social-link { padding: 0.2rem 0.8rem; font-size: 0.8rem; }
+            .skeleton { min-height: 60px; }
         }
     </style>
 </head>
@@ -629,11 +674,63 @@
         const socialStatic = document.getElementById('socialStatic');
         const slidesContainer = document.getElementById('slidesContainer');
         const dots = document.querySelectorAll('.dot');
+        const worksSlide = document.getElementById('works');
 
         let worksData = [];
         let currentSlide = 0;
         const totalSlides = 3;
         let isAnimating = false;
+
+        // ── PREVENT SCROLL PROPAGATION FROM GRID ──
+        function setupGridScroll() {
+            grid.addEventListener('wheel', (e) => {
+                const isAtTop = grid.scrollTop === 0;
+                const isAtBottom = grid.scrollHeight - grid.scrollTop - grid.clientHeight < 1;
+                
+                if (e.deltaY < 0 && isAtTop) {
+                    // At top, scrolling up - let parent handle it
+                    e.stopPropagation();
+                    return;
+                }
+                if (e.deltaY > 0 && isAtBottom) {
+                    // At bottom, scrolling down - let parent handle it
+                    e.stopPropagation();
+                    return;
+                }
+                // Otherwise, grid handles the scroll
+                e.stopPropagation();
+            }, { passive: true });
+
+            // Touch handling for grid
+            let touchStartY = 0;
+            let touchStartTime = 0;
+            
+            grid.addEventListener('touchstart', (e) => {
+                touchStartY = e.changedTouches[0].screenY;
+                touchStartTime = Date.now();
+            }, { passive: true });
+
+            grid.addEventListener('touchmove', (e) => {
+                // Allow grid to scroll naturally
+                e.stopPropagation();
+            }, { passive: true });
+
+            grid.addEventListener('touchend', (e) => {
+                const deltaY = touchStartY - e.changedTouches[0].screenY;
+                const deltaTime = Date.now() - touchStartTime;
+                
+                const isAtTop = grid.scrollTop === 0;
+                const isAtBottom = grid.scrollHeight - grid.scrollTop - grid.clientHeight < 1;
+                
+                // If we're at the top and swiping down, or at bottom and swiping up
+                if ((isAtTop && deltaY < 0) || (isAtBottom && deltaY > 0)) {
+                    // Let parent handle it
+                    e.stopPropagation();
+                    return;
+                }
+                e.stopPropagation();
+            }, { passive: true });
+        }
 
         // ── AUTO-DETECT IMAGES ──
         async function discoverImages() {
@@ -684,13 +781,37 @@
             return ['1.jpg', '2.jpg', '3.png', '4.jpg', '5.jpeg', '6.jpg', '7.jpg'];
         }
 
+        // ── RENDER SKELETONS ──
+        function renderSkeletons(count) {
+            grid.innerHTML = '';
+            const skeletonCount = count || 8;
+            for (let i = 0; i < skeletonCount; i++) {
+                const skeleton = document.createElement('div');
+                skeleton.className = 'skeleton';
+                skeleton.innerHTML = `<div class="skeleton-bar"></div>`;
+                grid.appendChild(skeleton);
+            }
+        }
+
         // ── RENDER GALLERY ──
         function renderGallery() {
             grid.innerHTML = '';
             worksData.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'work-card';
-                card.innerHTML = `<img src="${item.image}" alt="Artwork ${index + 1}" class="card-img" loading="lazy" onerror="this.src='https://placehold.co/600x800/2a2520/ece4db?text=?'" />`;
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = `Artwork ${index + 1}`;
+                img.className = 'card-img';
+                img.loading = 'lazy';
+                img.onerror = function() {
+                    this.src = 'https://placehold.co/600x800/2a2520/ece4db?text=?';
+                    this.classList.add('loaded');
+                };
+                img.onload = function() {
+                    this.classList.add('loaded');
+                };
+                card.appendChild(img);
                 card.addEventListener('click', (e) => {
                     e.stopPropagation();
                     openLightbox(index);
@@ -746,10 +867,20 @@
             });
         });
 
-        // ── WHEEL SCROLL ──
+        // ── WHEEL SCROLL (with grid check) ──
         let wheelTimeout = false;
         document.addEventListener('wheel', (e) => {
             if (lightboxModal.classList.contains('active')) return;
+            
+            // Check if the grid is being scrolled
+            const target = e.target;
+            const isScrollingGrid = target.closest('.grid');
+            
+            if (isScrollingGrid) {
+                // Let the grid handle its own scroll
+                return;
+            }
+            
             if (wheelTimeout) return;
             
             const direction = e.deltaY > 0 ? 1 : -1;
@@ -765,21 +896,40 @@
         }, { passive: true });
 
         // ── TOUCH SWIPE ──
-        let touchStartY = 0;
-        let touchStartTime = 0;
+        let touchStartYGlobal = 0;
+        let touchStartTimeGlobal = 0;
 
         document.addEventListener('touchstart', (e) => {
             if (lightboxModal.classList.contains('active')) return;
-            touchStartY = e.changedTouches[0].screenY;
-            touchStartTime = Date.now();
+            
+            // Check if touching the grid
+            const target = e.target;
+            const isTouchingGrid = target.closest('.grid');
+            
+            if (isTouchingGrid) {
+                // Let grid handle it
+                return;
+            }
+            
+            touchStartYGlobal = e.changedTouches[0].screenY;
+            touchStartTimeGlobal = Date.now();
         }, { passive: true });
 
         document.addEventListener('touchend', (e) => {
             if (lightboxModal.classList.contains('active')) return;
-            if (touchStartY === 0) return;
+            if (touchStartYGlobal === 0) return;
             
-            const deltaY = touchStartY - e.changedTouches[0].screenY;
-            const deltaTime = Date.now() - touchStartTime;
+            // Check if touching the grid
+            const target = e.target;
+            const isTouchingGrid = target.closest('.grid');
+            
+            if (isTouchingGrid) {
+                touchStartYGlobal = 0;
+                return;
+            }
+            
+            const deltaY = touchStartYGlobal - e.changedTouches[0].screenY;
+            const deltaTime = Date.now() - touchStartTimeGlobal;
             
             if (Math.abs(deltaY) > 40 && deltaTime < 500) {
                 const direction = deltaY > 0 ? 1 : -1;
@@ -788,7 +938,7 @@
                     goToSlide(nextSlide);
                 }
             }
-            touchStartY = 0;
+            touchStartYGlobal = 0;
         }, { passive: true });
 
         // ── KEYBOARD NAV ──
@@ -930,9 +1080,18 @@
 
         // ── INIT ──
         async function init() {
+            // Show skeletons first
+            renderSkeletons(8);
+            
             const imageList = await discoverImages();
             worksData = imageList.map(file => ({ image: file }));
-            renderGallery();
+            
+            // Small delay to show skeletons
+            setTimeout(() => {
+                renderGallery();
+                setupGridScroll();
+            }, 300);
+            
             renderStaticSocial();
             animateCanvas();
             
